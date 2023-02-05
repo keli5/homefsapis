@@ -1,4 +1,5 @@
 const fs = require("fs")
+const path = require("path")
 
 const express = require("express")
 const youtubedl = require("youtube-dl-exec")
@@ -13,6 +14,8 @@ interface Query {
 }
 
 app.use(customLogger)
+
+app.use("/public", express.static(path.join(__dirname, "public")))
 // -- format: mp3, wav, m4a
 // -- url param ?link=<any ytdl compatible source>
 app.get("/api/ytdl/audio/:format", (req: Request<any, any, any, Query>, res: Response) => {
@@ -21,6 +24,8 @@ app.get("/api/ytdl/audio/:format", (req: Request<any, any, any, Query>, res: Res
     const format = req.params.format
     const linkhash = hashCode(link)
     const filename = linkhash + "." + format
+
+    res.setHeader("Content-Disposition", `attachment; filename=${filename}`)
 
     if (fs.existsSync("./savedfiles/" + filename)) {
         console.log(`${req.ip} serving pre-existing ${link} as ${format} (filename ${filename})`)
@@ -47,6 +52,12 @@ app.get("/api/ytdl/audio/:format", (req: Request<any, any, any, Query>, res: Res
         return res.send(err).status(400)
     })
     
+})
+
+app.get("/pages/ytdlapi", (req: Request, res: Response) => {
+    res.sendFile("pages/ytdl_api.html", {
+        root: "./src"
+    })
 })
 
 app.listen(port, () => {

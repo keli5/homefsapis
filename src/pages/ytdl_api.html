@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>YTDL API Web Interface</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <h1 class="col-auto">yt-dlp web API</h1>
+            <br>
+            <div class="input-group col-auto">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">URL: </div>
+                </div>
+                <input type="url" class="form-control" id="media-url" placeholder="yt-dlp compatible source">
+                <div class="input-group-append input-group-prepend">
+                    <div class="input-group-text"> as format: </div>
+                </div>
+                <select class="custom-select" id="format-selection">
+                    <option value="mp3" selected>.mp3</option>
+                    <option value="m4a">.m4a</option>
+                    <option value="wav">.wav</option>
+                </select>
+                <div class="input-group-append">
+                    <button id="download-button" class="btn btn-primary" onclick="downloadFile()">
+                        Download
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+        <script src="../public/js/ytdl_api.js"></script>
+    </body>
+</html>
