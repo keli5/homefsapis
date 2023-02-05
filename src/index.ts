@@ -1,11 +1,12 @@
 const fs = require("fs")
 const path = require("path")
+const config = require("./config.json")
 
 const express = require("express")
 const youtubedl = require("youtube-dl-exec")
 const customLogger = require("./customlogger").customLogger
 const app = express()
-const port = 23232
+const port = config.PORT
 
 import { Request, Response } from 'express';
 
