@@ -1,3 +1,5 @@
+const fs = require("fs")
+
 const express = require("express")
 const youtubedl = require("youtube-dl-exec")
 const customLogger = require("./customlogger").customLogger
@@ -11,13 +13,21 @@ interface Query {
 }
 
 app.use(customLogger)
-
+// -- format: mp3, wav, m4a
+// -- url param ?link=<any ytdl compatible source>
 app.get("/api/ytdl/audio/:format", (req: Request<any, any, any, Query>, res: Response) => {
     const { query } = req;
     const link = query.link
     const format = req.params.format
     const linkhash = hashCode(link)
     const filename = linkhash + "." + format
+
+    if (fs.existsSync("./savedfiles/" + filename)) {
+        console.log(`${req.ip} serving pre-existing ${link} as ${format} (filename ${filename})`)
+        return res.sendFile(`savedfiles/${filename}`, {
+            root: "."
+        })
+    }
 
     console.log(`${req.ip} downloading ${link} as ${format} (filename ${filename})`)
     
@@ -30,29 +40,11 @@ app.get("/api/ytdl/audio/:format", (req: Request<any, any, any, Query>, res: Res
         audioFormat: format,
     }).then((output: any) => {
         res.contentType(`savedfiles/${filename}`)
-        res.sendFile(`savedfiles/${filename}`, {
+        return res.sendFile(`savedfiles/${filename}`, {
             root: "."
         })
     }).catch((err: Error) => {
-        res.send(err).status(400)
-    })
-    
-})
-
-app.get("/api/ytdl/serveExistingFile/:format", (req: Request<any, any, any, Query>, res: Response) => {
-    console.log("hi")
-    const { query } = req;
-    const link = query.link
-    const format = req.params.format
-    const linkhash = hashCode(link)
-    const filename = linkhash + "." + format
-
-    console.log(`${req.ip} requesting existing ${link} as ${format} (filename ${filename})`)
-    
-
-
-    res.sendFile(`savedfiles/${filename}`, {
-        root: "."
+        return res.send(err).status(400)
     })
     
 })
