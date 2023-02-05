@@ -55,6 +55,43 @@ app.get("/api/ytdl/audio/:format", (req: Request<any, any, any, Query>, res: Res
     
 })
 
+// same as audio
+// mp4, webm
+app.get("/api/ytdl/video/:format", (req: Request<any, any, any, Query>, res: Response) => {
+    const { query } = req;
+    const link = query.link
+    const format = req.params.format
+    const linkhash = hashCode(link)
+    const filename = linkhash + "." + format
+
+    res.setHeader("Content-Disposition", `attachment; filename=${filename}`)
+
+    if (fs.existsSync("./savedfiles/" + filename)) {
+        console.log(`${req.ip} serving pre-existing ${link} as ${format} (filename ${filename})`)
+        return res.sendFile(`savedfiles/${filename}`, {
+            root: "."
+        })
+    }
+
+    console.log(`${req.ip} downloading ${link} as ${format} (filename ${filename})`)
+    
+    youtubedl(link, {
+        noWarnings: true,
+        preferFreeFormats: true,
+        restrictFilenames: true,
+        output: `savedfiles/${filename}`,
+        recode: format
+    }).then((output: any) => {
+        res.contentType(`savedfiles/${filename}`)
+        return res.sendFile(`savedfiles/${filename}`, {
+            root: "."
+        })
+    }).catch((err: Error) => {
+        return res.send(err).status(400)
+    })
+    
+})
+
 app.get("/pages/ytdlapi", (req: Request, res: Response) => {
     res.sendFile("pages/ytdl_api.html", {
         root: "./src"
