@@ -8,17 +8,17 @@
 
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="container">
             <h1 class="col-auto">yt-dlp web API</h1>
             <br>
-            <div class="input-group col-5">
+            <div class="input-group col-md">
                 <div class="input-group-prepend">
                     <div class="input-group-text">URL:</div>
                 </div>
                 <input type="url" class="form-control" id="media-url" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
             </div>
             <br>
-            <div class="input-group col-5">
+            <div class="input-group col-md">
                 <div class="input-group-prepend">
                     <div class="input-group-text">as</div><button id="switch-dl-format" class="btn btn-outline-primary" onclick="switchDownloadFormat()">audio</button><div class="input-group-text">type</div>
                 </div>
@@ -32,9 +32,20 @@
                 </div>
             </div>
             <br>
-            <div class="col-9">
-                <p>Downloading video? <kbd>webm</kbd> will be the best overall. <kbd>mp4</kbd> will be much slower to download and potentially lower quality.</p>
-                <p>Downloading audio? <kbd>mp3</kbd> will be the smallest, but may be lower quality. <kbd>wav</kbd> will be large, but better quality. <kbd>m4a</kbd> is a good middle ground.</p>
+            <div class="col-md">
+                <p>Downloading video?
+                    <ul>
+                        <li><kbd>webm</kbd> will be the best quality and size.</li>
+                        <li><kbd>mp4</kbd> will take a long time to download and may be low quality.</li>
+                    </ul>
+                </p>
+                <p>Downloading audio?
+                    <ul>
+                        <li><kbd>mp3</kbd> may be lower quality, but will produce small files.</li>
+                        <li><kbd>m4a</kbd> offers good quality and slightly larger files, but smaller than wav.</li>
+                        <li><kbd>wav</kbd> will be the best audio quality, but will produce very large files.</li>
+                    </ul>
+                </p>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
