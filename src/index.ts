@@ -1,5 +1,8 @@
 const fs = require("fs")
 const path = require("path")
+const process = require("process")
+const { spawn } = require('child_process');
+
 const config = require("./config.json")
 
 const express = require("express")
@@ -7,6 +10,8 @@ const youtubedl = require("youtube-dl-exec")
 const customLogger = require("./customlogger").customLogger
 const app = express()
 const port = config.PORT
+
+const EXECUTABLEPATH = path.resolve("node_modules/youtube-dl-exec/bin/yt-dlp" + (process.platform == "win32" ? ".exe" : ""))
 
 import { Request, Response } from 'express';
 
@@ -90,6 +95,20 @@ app.get("/api/ytdl/video/:format", (req: Request<any, any, any, Query>, res: Res
         return res.send(err).status(400)
     })
     
+})
+
+app.get("/api/ytdl/version", (req: Request, res: Response) => {
+    
+    let child = spawn(EXECUTABLEPATH,  ["--version"]) 
+
+    child.stdout.on('data', (data) => {
+        res.json(
+            {
+                "executablePath": EXECUTABLEPATH,
+                "version": data.toString().replace("\r", "").replace("\n","")
+            }
+        )
+    })
 })
 
 app.get("/pages/ytdlapi", (req: Request, res: Response) => {
